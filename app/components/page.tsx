@@ -16,7 +16,7 @@ export default function Navigation() {
           <li>Download</li>
         </ul>
       </div>
-      <button className='bg-black text-white px-5 py-2 rounded-xl font-semibold'>
+      <button className='bg-black text-white px-5 py-2 rounded-xl font-semibold hover:bg-gray-500 hover:text-white'>
         Login
       </button>
     </nav>
