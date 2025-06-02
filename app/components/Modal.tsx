@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, MouseEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoMdClose } from 'react-icons/io';
