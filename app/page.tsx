@@ -1,5 +1,3 @@
-'use client';
-
 import BlurText from './components/BlurText';
 import Modal from '@/app/components/Modal';
 import SplashCursor from './components/SplashCursor';
