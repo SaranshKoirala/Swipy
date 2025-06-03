@@ -2,11 +2,13 @@
 
 import Stepper, { Step } from '@/app/components/Stepper';
 import { useState } from 'react';
+import SplashCursor from '../components/SplashCursor';
 
 export default function Products() {
   const [boolean, setBoolean] = useState(false);
   return (
     <div className='flex justify-center items-center h-screen'>
+      <SplashCursor />
       {!boolean ? (
         <Stepper
           initialStep={1}
