@@ -35,7 +35,7 @@ export default function Navigation() {
       </button>
       {isOpen && (
         <Modal onClose={() => setIsOpen(false)}>
-          <form className='relative flex flex-col justify-center items-center gap-5 p-3'>
+          <form className='relative flex flex-col justify-center items-center gap-5 p-3 text-black'>
             <IoIosClose
               className='absolute -top-5 -right-5 text-black text-4xl cursor-pointer'
               onClick={() => setIsOpen(false)}
