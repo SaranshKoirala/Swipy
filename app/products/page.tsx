@@ -1,10 +1,55 @@
 'use client';
 
 import Stepper, { Step } from '@/app/components/Stepper';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import ProductList from './ProductList';
+
+// interface ProductImage {
+//   url: string;
+//   alt: string;
+//   isPrimary: boolean;
+// }
+
+interface Product {
+  _id: string;
+  productName: string;
+  productPrice: number;
+  productDescription?: string;
+  productImages: any;
+}
+
+interface ProductListProps {
+  products: Product[];
+}
+
+interface product {
+  products: Product[] | undefined;
+}
 
 export default function Products() {
-  const [boolean, setBoolean] = useState(false);
+  const [boolean, setBoolean] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [products, setProducts] = useState<Product>();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('/api/products');
+        setProducts(response.data);
+      } catch (err: unknown) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+  {
+    console.log(products);
+  }
   return (
     <div className='flex justify-center items-center h-screen'>
       {!boolean ? (
@@ -52,7 +97,8 @@ export default function Products() {
           </Step>
         </Stepper>
       ) : (
-        <div>Products</div>
+        // <ProductList product={products} />
+        <div></div>
       )}
     </div>
   );
