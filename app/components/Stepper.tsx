@@ -44,7 +44,7 @@ export default function Stepper({
   nextButtonProps = {},
   backButtonText = 'Back',
   nextButtonText = 'Continue',
-  disableStepIndicators = false,
+  disableStepIndicators = true,
   renderStepIndicator,
   ...rest
 }: StepperProps) {

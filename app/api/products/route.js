@@ -6,7 +6,7 @@ export async function GET() {
   try {
     await dbConnect();
     const products = await Product.find();
-    if (!products) {
+    if (products.length === 0) {
       return NextResponse.json({
         message: 'No products available!',
         status: 404,
@@ -52,5 +52,6 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error(error);
+    NextResponse.json({ message: 'Internal server error!', status: 500 });
   }
 }

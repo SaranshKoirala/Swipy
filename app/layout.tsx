@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Navigation from './components/Navigation';
+import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: 'Swipy | E-commerce Site',
@@ -15,10 +16,12 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className='bg-black text-white h-screen overflow-hidden'>
-        <header>
-          <Navigation />
-        </header>
-        <main>{children}</main>
+        <Providers>
+          <header>
+            <Navigation />
+          </header>
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   );
