@@ -117,11 +117,11 @@ export default function Products() {
                 }></div>
             </div>
 
-            <Image
+            <img
               src={data[productIndex]?.productImages[imageIndex]?.url}
               alt={data[productIndex]?.productImages[imageIndex]?.alt}
               onClick={handleImageIndex}
-              className='h-full w-full object-cover rounded-lg '
+              className=' object-cover rounded-lg h-full w-full cursor-pointer'
             />
             <div className='absolute bottom-0 left-0 right-0 h-[200px] bg-gradient-to-t from-black to-transparent' />
           </div>
