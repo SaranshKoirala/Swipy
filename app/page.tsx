@@ -33,13 +33,15 @@ export default function Home() {
   }
 
   return (
-    <div className='relative h-screen w-full flex flex-1 flex-col justify-center items-center gap-8'>
+    <div className='relative min-h-[90vh] w-full flex flex-1 flex-col justify-center items-center gap-8'>
+      <SplashCursor />
+
       <BlurText
         text='Swipe something epic.'
         delay={150}
         animateBy='words'
         direction='top'
-        className='text-9xl font-bold'
+        className='text-9xl font-bold tracking-tight'
       />
       {/* <Modal /> */}
 
