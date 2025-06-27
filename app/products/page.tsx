@@ -2,12 +2,11 @@
 import { GrFormClose } from 'react-icons/gr';
 import { FaCartShopping } from 'react-icons/fa6';
 import { FaRegHeart } from 'react-icons/fa6';
-import { FaCheck } from 'react-icons/fa6';
 import Stepper, { Step } from '@/app/components/Stepper';
-import { useEffect, useState } from 'react';
-import ProductList from './ProductList';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import fetchProducts from '@/lib/api';
+import Image from 'next/image';
 
 export default function Products() {
   const [boolean, setBoolean] = useState(true);
@@ -118,7 +117,7 @@ export default function Products() {
                 }></div>
             </div>
 
-            <img
+            <Image
               src={data[productIndex]?.productImages[imageIndex]?.url}
               alt={data[productIndex]?.productImages[imageIndex]?.alt}
               onClick={handleImageIndex}

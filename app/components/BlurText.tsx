@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState, useMemo, CSSProperties } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 
 interface AnimationStep {
   [key: string]: any; // e.g., filter, opacity, y, etc.
