@@ -17,7 +17,7 @@ export default function Products() {
   const [productIndex, setProductIndex] = useState(0);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['products'],
+    queryKey: ['products', [firstCategory, secondCategory, thirdCategory]],
     queryFn: fetchProducts,
     enabled: !boolean,
   });

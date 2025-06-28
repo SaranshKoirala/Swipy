@@ -2,19 +2,32 @@ import dbConnect from '../../../lib/dbConnect';
 import { NextResponse } from 'next/server';
 import { Product } from '../../../models/Product';
 
-export async function GET() {
+export async function GET(request, response) {
   try {
     await dbConnect();
-    const products = await Product.find();
+    const categories = request.query.category;
+
+    // If only one category is sent: category=shoes
+    // If multiple: category=shoes&category=clothes
+    const categoryArray = Array.isArray(categories)
+      ? categories
+      : categories
+      ? [categories]
+      : [];
+
+    const products = await Product.find({
+      ...(categoryArray.length > 0 && { category: { $in: categoryArray } }),
+    });
+
     if (products.length === 0) {
       return NextResponse.json({
         message: 'No products available!',
         status: 404,
       });
     }
-    return NextResponse.json(products);
+    NextResponse.json({ products, status: 200 });
   } catch (error) {
-    return NextResponse.json({
+    NextResponse.json({
       error: 'Failed to fetch products',
       status: 500,
     });
@@ -46,7 +59,7 @@ export async function POST(request) {
       productImages,
     });
     await newProduct.save();
-    return NextResponse.json({
+    NextResponse.json({
       message: 'Product added sucessfully.',
       status: 201,
     });
