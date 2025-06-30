@@ -40,14 +40,20 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     await dbConnect();
-    const { productName, productDescription, productPrice, productImages } =
-      await request.json();
+    const {
+      productName,
+      productDescription,
+      productPrice,
+      productImages,
+      productCategory,
+    } = await request.json();
 
     if (
       !productName ||
       !productDescription ||
       !productPrice ||
-      !productImages
+      !productImages ||
+      !productCategory
     ) {
       return NextResponse.json({
         message: 'Please give the full inputs',
@@ -60,6 +66,7 @@ export async function POST(request) {
       productDescription,
       productPrice,
       productImages,
+      productCategory,
     });
     await newProduct.save();
     return NextResponse.json({
