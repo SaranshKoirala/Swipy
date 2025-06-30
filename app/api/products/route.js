@@ -23,10 +23,8 @@ export async function GET(request) {
     const products = await Product.find(query);
 
     if (products.length === 0) {
-      return NextResponse.json({
-        message: 'No products available!',
-        status: 404,
-      });
+      const allProducts = await Product.find();
+      return NextResponse.json({ data: allProducts, status: 200 });
     }
     return NextResponse.json({ data: products, status: 200 });
   } catch (error) {

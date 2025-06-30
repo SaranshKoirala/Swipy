@@ -15,7 +15,7 @@ const Modal = ({ onClose, children }: ModalProps) => {
       />
 
       {/* Modal content */}
-      <div className='relative z-10 bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-md'>
+      <div className='relative z-10  rounded-xl shadow-lg  max-w-md'>
         {children}
       </div>
     </div>
