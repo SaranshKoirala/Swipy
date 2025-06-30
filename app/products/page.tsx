@@ -3,26 +3,48 @@ import { GrFormClose } from 'react-icons/gr';
 import { FaCartShopping } from 'react-icons/fa6';
 import { FaRegHeart } from 'react-icons/fa6';
 import Stepper, { Step } from '@/app/components/Stepper';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import fetchProducts from '@/lib/api';
 import Image from 'next/image';
+import axios from 'axios';
+
+interface ProductImage {
+  url: string;
+  alt: string;
+}
+
+interface Product {
+  productName: string;
+  productDescription: string;
+  productPrice: string;
+  productImages: ProductImage[];
+  productCategory: string;
+}
 
 export default function Products() {
   const [boolean, setBoolean] = useState(true);
-  const [firstCategory, setFirstCategory] = useState('');
-  const [secondCategory, setSecondCategory] = useState('');
-  const [thirdCategory, setThirdCategory] = useState('');
+  const [productData, setProductData] = useState<Product[]>();
+  const [searchKeyword, setSearchKeyword] = useState('');
   const [imageIndex, setImageIndex] = useState(0);
   const [productIndex, setProductIndex] = useState(0);
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['products', [firstCategory, secondCategory, thirdCategory]],
-    queryFn: fetchProducts,
-    enabled: !boolean,
-  });
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const params = new URLSearchParams();
 
-  if (error) return <div>Error loading data!</div>;
+        if (searchKeyword) {
+          params.append('searchKeyword', searchKeyword);
+        }
+        const response = await axios.get(`/api/products?${params.toString()}`);
+        setProductData(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchProducts();
+  }, [searchKeyword]);
 
   function handleImageIndex() {
     if (imageIndex >= 1) {
@@ -31,24 +53,72 @@ export default function Products() {
     setImageIndex((cur) => cur + 1);
   }
 
-  function handleProductIndex() {
-    if (productIndex >= data.length - 1) {
-      return setProductIndex(0);
-    }
-    setProductIndex((cur) => cur + 1);
-  }
+  // function handleProductIndex() {
+  //   if (productIndex >= productData?.length - 1) {
+  //     return setProductIndex(0);
+  //   }
+  //   setProductIndex((cur) => cur + 1);
+  // }
 
-  function handleCloseBtn() {
-    handleProductIndex();
-  }
+  // function handleCloseBtn() {
+  //   handleProductIndex();
+  // }
 
   {
-    console.log(productIndex);
+    console.log(productData);
   }
 
   return (
-    <div className='flex justify-center items-center min-h-[90vh]'>
-      {boolean ? (
+    <div className=' flex flex-col justify-center min-h-[90vh] items-center'>
+      <div className='relative'>
+        <div className=' px-5 py-2 font-bold text-2xl text-center  '>
+          {productData?.[productIndex]?.productName}
+        </div>
+        <div className='relative h-[525px] w-[470px] '>
+          <div className='absolute flex gap-2  top-1 w-full px-4'>
+            <div
+              className={
+                imageIndex === 1
+                  ? `w-1/2 h-1 bg-neutral-400`
+                  : `w-1/2 bg-neutral-900`
+              }></div>
+            <div
+              className={
+                imageIndex === 0
+                  ? `w-1/2  h-1 bg-neutral-400`
+                  : `w-1/2 bg-neutral-900`
+              }></div>
+          </div>
+
+          <img
+            src={productData?.[productIndex]?.productImages[imageIndex]?.url}
+            alt={productData?.[productIndex]?.productImages[imageIndex]?.alt}
+            onClick={handleImageIndex}
+            className=' object-cover rounded-lg h-full w-full cursor-pointer'
+          />
+          <div className='absolute bottom-0 left-0 right-0 h-[200px] bg-gradient-to-t from-black to-transparent'></div>
+          <p className='absolute left-5 -bottom-2 text-2xl font-semibold   '>
+            Rs.{productData?.[productIndex]?.productPrice}
+          </p>
+        </div>
+        <div className='flex gap-10 justify-center items-center m-6'>
+          <button className='w-12 h-12 rounded-full bg-white  flex items-center justify-center text-4xl text-neutral-900 '>
+            <GrFormClose />
+          </button>
+          <button className=' w-12 h-12 rounded-full bg-white   flex items-center justify-center text-2xl text-neutral-900'>
+            <FaRegHeart />
+          </button>
+          <button className=' w-12 h-12 rounded-full bg-white   flex items-center justify-center text-2xl text-neutral-900'>
+            <FaCartShopping />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+{
+  /* {boolean ? (
         <Stepper
           initialStep={1}
           backButtonText='Previous'
@@ -142,7 +212,5 @@ export default function Products() {
             </button>
           </div>
         </div>
-      )}
-    </div>
-  );
+      )} */
 }
