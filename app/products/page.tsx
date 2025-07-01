@@ -2,6 +2,7 @@
 import { GrFormClose } from 'react-icons/gr';
 import { FaCartShopping } from 'react-icons/fa6';
 import { FaRegHeart } from 'react-icons/fa6';
+import { FaHeart } from 'react-icons/fa';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import fetchProducts from '@/lib/api';
@@ -26,6 +27,9 @@ export default function Products() {
   const [tempKeyword, setTempKeyword] = useState('');
   const [imageIndex, setImageIndex] = useState(0);
   const [productIndex, setProductIndex] = useState(0);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(
+    null
+  );
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['products', searchKeyword],
@@ -63,6 +67,22 @@ export default function Products() {
     }
   }
 
+  function handleCloseBtn() {
+    setSwipeDirection('left');
+    setTimeout(() => {
+      handleProductIndex();
+      setSwipeDirection(null);
+    }, 300);
+  }
+
+  function handleFavouriteBtn() {
+    setSwipeDirection('right');
+    setTimeout(() => {
+      handleProductIndex();
+      setSwipeDirection(null);
+    }, 300);
+  }
+
   return (
     <div
       className='relative flex flex-col justify-center min-h-[90vh] items-center'
@@ -88,12 +108,19 @@ export default function Products() {
       ) : error ? (
         <div className='text-red-500'>Something went wrong</div>
       ) : (
-        <div className='relative'>
+        <div className='relative '>
           <div className='px-5 py-2 font-bold text-2xl text-center'>
             {data?.[productIndex]?.productName}
           </div>
 
-          <div className='relative'>
+          <div
+            className={`relative transition-all duration-300 ease-in-out ${
+              swipeDirection === 'left'
+                ? '-translate-x-[400px] rotate-[-20deg] opacity-0'
+                : swipeDirection === 'right'
+                ? 'translate-x-[400px] rotate-[20deg] opacity-0'
+                : ''
+            }`}>
             <div className='absolute flex gap-2 top-1 w-full px-4'>
               <div
                 className={
@@ -126,16 +153,20 @@ export default function Products() {
             </p>
           </div>
 
-          <div className='flex gap-10 justify-center items-center m-6'>
+          <div className='flex gap-10 justify-center items-center m-6 '>
             <button
-              className='w-12 h-12 rounded-full bg-white flex items-center justify-center text-4xl text-neutral-900'
-              onClick={handleProductIndex}>
+              className={`w-12 h-12 rounded-full bg-white flex items-center justify-center text-4xl font-bold transition-all ease-in-out duration-300 text-red-500 hover:bg-red-500 hover:text-white hover:scale-125 ${
+                swipeDirection === 'left' ? 'animate-ping bg-red-500' : ''
+              }`}
+              onClick={handleCloseBtn}>
               <GrFormClose />
             </button>
             <button
-              className='w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl text-neutral-900'
-              onClick={handleProductIndex}>
-              <FaRegHeart />
+              className={`w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl font-bold text-green-500 transition-all ease-in-out duration-300 hover:bg-green-500 hover:text-white hover:scale-125 ${
+                swipeDirection === 'right' ? 'animate-ping bg-green-500' : ''
+              }`}
+              onClick={handleFavouriteBtn}>
+              <FaHeart />
             </button>
             <button className='w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl text-neutral-900'>
               <FaCartShopping />
