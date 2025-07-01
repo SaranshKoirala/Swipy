@@ -6,6 +6,7 @@ import SplashCursor from './components/SplashCursor';
 import { IoIosClose } from 'react-icons/io';
 import { useState } from 'react';
 import axios, { AxiosError } from 'axios';
+import Link from 'next/link';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,13 +46,13 @@ export default function Home() {
       />
       {/* <Modal /> */}
 
-      <button
-        onClick={() => setIsOpen(true)}
-        className='px-5 py-2 bg-gradient-to-r from-red-500 to-orange-600 text-white rounded-3xl text-xl  hover:scale-x-110 transform transition-all duration-300'>
-        Create Account
-      </button>
+      <Link href={'/signup'}>
+        <button className='px-5 py-2 bg-gradient-to-r from-red-500 to-orange-600 text-white rounded-3xl text-xl  hover:scale-x-110 transform transition-all duration-300'>
+          Create Account
+        </button>
+      </Link>
 
-      {isOpen && (
+      {/* {isOpen && (
         <Modal onClose={() => setIsOpen(false)}>
           <form
             className='relative flex flex-col justify-center items-center gap-5 p-3 text-black'
@@ -101,7 +102,7 @@ export default function Home() {
             </button>
           </form>
         </Modal>
-      )}
+      )} */}
     </div>
   );
 }
