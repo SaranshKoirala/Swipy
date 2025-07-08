@@ -8,7 +8,7 @@ export default function Login() {
       <div>
         <Image
           src={'/login.png'}
-          alt='different products '
+          alt='different products'
           width={600}
           height={600}
         />
