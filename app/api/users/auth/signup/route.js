@@ -5,9 +5,8 @@ import { NextResponse } from 'next/server';
 export async function POST(request) {
   try {
     await dbConnect();
-    const { firstName, lastName, email, password, confirmPassword } =
-      await request.json();
-    if ((!firstName, !lastName, !email, !password, !confirmPassword)) {
+    const { name, email, password, confirmPassword } = await request.json();
+    if ((!name, !email, !password, !confirmPassword)) {
       return NextResponse.json({
         status: 400,
         message: 'All fields are required',
@@ -23,7 +22,7 @@ export async function POST(request) {
       return NextResponse.json({ status: 409, message: 'User already exits!' });
     }
 
-    const newUser = new User({ firstName, lastName, email, password });
+    const newUser = new User({ name, email, password });
     await newUser.save();
     return NextResponse.json({
       status: 201,

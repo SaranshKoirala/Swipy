@@ -1,8 +1,40 @@
+'use client';
+
+import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 
 export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!email || !password) {
+      alert('Please fill out the input fields!');
+      return;
+    }
+
+    try {
+      const response = await axios.post('/api/users/auth/login', {
+        email,
+        password,
+      });
+      if (response.data.status === 200) {
+        router.push('/');
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setEmail('');
+      setPassword('');
+    }
+  }
   return (
     <div className='flex justify-center items-center min-h-[90vh] gap-28'>
       <div>
@@ -13,18 +45,22 @@ export default function Login() {
           height={600}
         />
       </div>
-      <div className='flex flex-col justify-center items-center gap-6 bg-neutral-900 p-7 rounded-lg'>
+      <form
+        className='flex flex-col justify-center items-center gap-6 bg-neutral-900 p-7 rounded-lg'
+        onSubmit={handleSubmit}>
         <h1 className='text-3xl font-bold'>Login</h1>
-        {/* <input
-          placeholder='Name'
-          className=' w-80 h-10 p-3 rounded-sm focus:outline-none text-white bg-neutral-700 placeholder-white'
-        /> */}
         <input
           placeholder='Email'
+          type='email'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className=' w-80 h-10 p-3 rounded-sm focus:outline-none text-white bg-neutral-700 placeholder-white'
         />
         <input
           placeholder='Password'
+          type='password'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className=' w-80 h-10 p-3 rounded-sm focus:outline-none text-white bg-neutral-700 placeholder-white'
         />
         <button className='w-80 h-10 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg'>
@@ -47,7 +83,7 @@ export default function Login() {
           <FcGoogle className='text-xl' />
           Login with Google{' '}
         </button>
-      </div>
+      </form>
     </div>
   );
 }
