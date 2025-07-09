@@ -3,12 +3,14 @@
 import Image from 'next/image';
 import swipy from '../../public/swipy.png';
 import Link from 'next/link';
-import { useState } from 'react';
-import { IoIosClose } from 'react-icons/io';
-import Modal from './Modal';
+import { useUIStore } from '@/store/useUIStore';
+import { IoMdHeartEmpty } from 'react-icons/io';
+import { FiShoppingCart } from 'react-icons/fi';
+import { FaShoppingCart } from 'react-icons/fa';
+import { FaHeart } from 'react-icons/fa';
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
+  const user = useUIStore((state) => state.user);
   return (
     <nav className='flex justify-between items-center w-full px-5 bg-opacity-0'>
       <div className='flex items-center gap-4'>
@@ -26,15 +28,31 @@ export default function Navigation() {
           <Link href={'/downloads'} className='hover:text-red-500'>
             <li>Download</li>
           </Link>
+          {!user && (
+            <Link href={'/login'} className='hover:text-red-500'>
+              <li>Login</li>
+            </Link>
+          )}
         </ul>
       </div>
-      <Link href={'/login'}>
-        <button
-          className='bg-black text-white px-5 py-2 rounded-xl font-semibold hover:bg-gray-500 hover:text-white'
-          onClick={() => setIsOpen(true)}>
-          Login
-        </button>
-      </Link>
+      <div className='flex gap-6 text-xl px-5'>
+        <Link href={'/favourite'} className='group relative'>
+          <button>
+            <FaHeart />
+          </button>
+          <div className='absolute bg-white text-black text-sm px-2 hidden group-hover:block'>
+            Favourite
+          </div>
+        </Link>
+        <Link href={'/cart'} className='group relative'>
+          <button>
+            <FaShoppingCart />
+          </button>
+          <div className='absolute bg-white text-black text-sm px-2 hidden group-hover:block -left-3'>
+            Cart:0
+          </div>
+        </Link>
+      </div>
     </nav>
   );
 }

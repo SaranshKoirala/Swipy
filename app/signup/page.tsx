@@ -3,9 +3,10 @@
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
+import { useUIStore } from '@/store/useUIStore';
 
 export default function Signup() {
   const [name, setName] = useState('');
@@ -13,6 +14,14 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
+
+  const user = useUIStore((state) => state.user);
+
+  useEffect(() => {
+    if (user) {
+      router.push('/'); // redirect to homepage if logged in
+    }
+  }, [user, router]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

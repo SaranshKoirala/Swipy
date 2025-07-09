@@ -3,14 +3,25 @@
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
+import { useUIStore } from '@/store/useUIStore';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+
+  const user = useUIStore((state) => state.user);
+  const setUser = useUIStore((state) => state.setUser);
+
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+      return; // redirect to homepage if logged in
+    }
+  }, [user]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -25,6 +36,7 @@ export default function Login() {
         password,
       });
       if (response.data.status === 200) {
+        setUser(response.data.user);
         router.push('/');
         return;
       }
