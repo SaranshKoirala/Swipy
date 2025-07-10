@@ -24,14 +24,17 @@ interface Product {
 interface UIStore {
   user: User | null;
   cart: Product[];
+  favourite: Product[];
   setUser: (user: User) => void;
   clearUser: () => void;
   addToCart: (product: Product) => void;
+  addToFavourite: (product: Product) => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
   user: null,
   cart: [],
+  favourite: [],
 
   //user store
   setUser: (user) => set({ user }),
@@ -44,6 +47,16 @@ export const useUIStore = create<UIStore>((set) => ({
       if (exists) return state;
       return {
         cart: [...state.cart, product],
+      };
+    });
+  },
+
+  addToFavourite: (product) => {
+    set((state) => {
+      const exists = state.favourite.some((item) => item._id === product._id);
+      if (exists) return state;
+      return {
+        favourite: [...state.favourite, product],
       };
     });
   },

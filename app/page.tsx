@@ -4,8 +4,6 @@ import BlurText from './components/BlurText';
 import SplashCursor from './components/SplashCursor';
 import Link from 'next/link';
 import { useUIStore } from '@/store/useUIStore';
-// import { useRouter } from 'next/navigation';
-// import { useEffect } from 'react';
 
 export default function Home() {
   const user = useUIStore((state) => state.user);

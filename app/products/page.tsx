@@ -1,7 +1,7 @@
 'use client';
+
 import { GrFormClose } from 'react-icons/gr';
 import { FaCartShopping } from 'react-icons/fa6';
-import { FaRegHeart } from 'react-icons/fa6';
 import { FaHeart } from 'react-icons/fa';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -9,6 +9,8 @@ import fetchProducts from '@/lib/api';
 import Modal from '../components/Modal';
 import { useUIStore } from '@/store/useUIStore';
 import { ObjectId } from 'mongoose';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 interface Images {
   url: string;
@@ -34,8 +36,12 @@ export default function Products() {
     null
   );
 
+  const router = useRouter();
+
   const addToCart = useUIStore((state) => state.addToCart);
-  const cart = useUIStore((state) => state.cart);
+  const addToFavourite = useUIStore((state) => state.addToFavourite);
+  const user = useUIStore((state) => state.user);
+  const favourite = useUIStore((state) => state.favourite);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['products', searchKeyword],
@@ -67,6 +73,7 @@ export default function Products() {
 
   function listenEnterKey(e: React.KeyboardEvent<HTMLElement>) {
     if (e.key === 'Enter') {
+      e.preventDefault();
       setBoolean(false);
       setSearchKeyword(tempKeyword);
       setTempKeyword('');
@@ -81,7 +88,10 @@ export default function Products() {
     }, 300);
   }
 
-  function handleFavouriteBtn() {
+  function handleFavouriteBtn(product: Product) {
+    if (!product) return;
+    addToFavourite(product);
+    toast.success('Added to favourite!');
     setSwipeDirection('right');
     setTimeout(() => {
       handleProductIndex();
@@ -91,11 +101,22 @@ export default function Products() {
 
   function handleCartBtn(product: Product) {
     if (!product) return;
+    if (!user) {
+      toast.error('You need to login first!');
+      router.push('/login');
+      return;
+    }
     addToCart(product);
+    toast.success('Added to cart!');
+    setSwipeDirection('right');
+    setTimeout(() => {
+      handleProductIndex();
+      setSwipeDirection(null);
+    }, 300);
   }
 
   {
-    console.log(cart);
+    console.log(favourite);
   }
 
   return (
@@ -180,7 +201,7 @@ export default function Products() {
               className={`w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl font-bold text-green-500 transition-all ease-in-out duration-300 hover:bg-green-500 hover:text-white hover:scale-125 ${
                 swipeDirection === 'right' ? 'animate-ping bg-green-500' : ''
               }`}
-              onClick={handleFavouriteBtn}>
+              onClick={() => handleFavouriteBtn(data?.[productIndex])}>
               <FaHeart />
             </button>
             <button

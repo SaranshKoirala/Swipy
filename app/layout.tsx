@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Navigation from './components/Navigation';
 import { Providers } from './providers';
+import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: 'Swipy | E-commerce Site',
@@ -20,6 +21,7 @@ export default function RootLayout({
           <header>
             <Navigation />
           </header>
+          <Toaster position='bottom-right' />
           <main>{children}</main>
         </Providers>
       </body>
