@@ -7,19 +7,22 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import fetchProducts from '@/lib/api';
 import Modal from '../components/Modal';
+import { useUIStore } from '@/store/useUIStore';
+import { ObjectId } from 'mongoose';
 
-// interface ProductImage {
-//   url: string;
-//   alt: string;
-// }
+interface Images {
+  url: string;
+  alt: string;
+}
 
-// interface Product {
-//   productName: string;
-//   productDescription: string;
-//   productPrice: string;
-//   productImages: ProductImage[];
-//   productCategory: string;
-// }
+interface Product {
+  _id: ObjectId;
+  productName: string;
+  productDescription: string;
+  productPrice: number;
+  productImages: Images[];
+  productCategory: string;
+}
 
 export default function Products() {
   const [boolean, setBoolean] = useState(false);
@@ -30,6 +33,9 @@ export default function Products() {
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(
     null
   );
+
+  const addToCart = useUIStore((state) => state.addToCart);
+  const cart = useUIStore((state) => state.cart);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['products', searchKeyword],
@@ -81,6 +87,15 @@ export default function Products() {
       handleProductIndex();
       setSwipeDirection(null);
     }, 300);
+  }
+
+  function handleCartBtn(product: Product) {
+    if (!product) return;
+    addToCart(product);
+  }
+
+  {
+    console.log(cart);
   }
 
   return (
@@ -168,7 +183,9 @@ export default function Products() {
               onClick={handleFavouriteBtn}>
               <FaHeart />
             </button>
-            <button className='w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl text-neutral-900'>
+            <button
+              className='w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl text-neutral-900'
+              onClick={() => handleCartBtn(data?.[productIndex])}>
               <FaCartShopping />
             </button>
           </div>
