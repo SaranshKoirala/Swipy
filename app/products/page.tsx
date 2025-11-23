@@ -11,6 +11,7 @@ import { useUIStore } from '@/store/useUIStore';
 import { ObjectId } from 'mongoose';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 interface Images {
   url: string;
@@ -47,6 +48,8 @@ export default function Products() {
     queryKey: ['products', searchKeyword],
     queryFn: () => fetchProducts(searchKeyword),
   });
+
+  console.log('loading', isLoading);
 
   function handleImageIndex() {
     if (imageIndex >= 1) {
@@ -121,11 +124,11 @@ export default function Products() {
 
   return (
     <div
-      className='relative flex flex-col justify-center min-h-[90vh] items-center'
+      className='relative flex flex-col justify-center items-center min-h-[90vh]'
       onKeyDown={listenKeys}
       tabIndex={0}>
       {boolean && (
-        <div className='absolute top-4 z-50'>
+        <div className='top-4 z-50 absolute'>
           <Modal onClose={() => setBoolean(false)}>
             <input
               autoFocus
@@ -133,18 +136,20 @@ export default function Products() {
               value={tempKeyword}
               onChange={(e) => setTempKeyword(e.target.value)}
               onKeyDown={listenEnterKey}
-              className='w-96 h-12 rounded-lg bg-neutral-900 py-2 px-4 placeholder:text-neutral-400 focus:outline-none'
+              className='bg-neutral-900 px-4 py-2 rounded-lg focus:outline-none w-96 h-12 placeholder:text-neutral-400'
             />
           </Modal>
         </div>
       )}
 
       {isLoading ? (
-        <div>...Loading</div>
+        <ClipLoader size={40} color='#fff' />
       ) : error ? (
         <div className='text-red-500'>Something went wrong</div>
+      ) : data.length === 0 ? (
+        <div>No products found!</div>
       ) : (
-        <div className='relative '>
+        <div className='relative'>
           <div className='px-5 py-2 font-bold text-2xl text-center'>
             {data?.[productIndex]?.productName}
           </div>
@@ -157,7 +162,7 @@ export default function Products() {
                 ? 'translate-x-[400px] rotate-[20deg] opacity-0'
                 : ''
             }`}>
-            <div className='absolute flex gap-2 top-1 w-full px-4'>
+            <div className='top-1 absolute flex gap-2 px-4 w-full'>
               <div
                 className={
                   imageIndex === 1
@@ -172,24 +177,24 @@ export default function Products() {
                 }></div>
             </div>
 
-            <div className='h-[525px] w-[480px]'>
+            <div className='w-[480px] h-[525px]'>
               <img
                 src={data?.[productIndex]?.productImages[imageIndex]?.url}
                 alt={data?.[productIndex]?.productImages[imageIndex]?.alt}
                 onClick={handleImageIndex}
                 loading='eager'
-                className='object-cover rounded-lg h-full w-full cursor-pointer'
+                className='rounded-lg w-full h-full object-cover cursor-pointer'
               />
             </div>
 
-            <div className='absolute bottom-0 left-0 right-0 h-[200px] bg-gradient-to-t from-black to-transparent'></div>
+            <div className='right-0 bottom-0 left-0 absolute bg-gradient-to-t from-black to-transparent h-[200px]'></div>
 
-            <p className='absolute left-5 -bottom-2 text-2xl font-semibold'>
+            <p className='-bottom-2 left-5 absolute font-semibold text-2xl'>
               Rs.{data?.[productIndex]?.productPrice}
             </p>
           </div>
 
-          <div className='flex gap-10 justify-center items-center m-6 '>
+          <div className='flex justify-center items-center gap-10 m-6'>
             <button
               className={`w-12 h-12 rounded-full bg-white flex items-center justify-center text-4xl font-bold transition-all ease-in-out duration-300 text-red-500 hover:bg-red-500 hover:text-white hover:scale-125 ${
                 swipeDirection === 'left' ? 'animate-ping bg-red-500' : ''
@@ -205,7 +210,7 @@ export default function Products() {
               <FaHeart />
             </button>
             <button
-              className='w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl text-neutral-900'
+              className='flex justify-center items-center bg-white rounded-full w-12 h-12 text-neutral-900 text-2xl'
               onClick={() => handleCartBtn(data?.[productIndex])}>
               <FaCartShopping />
             </button>
