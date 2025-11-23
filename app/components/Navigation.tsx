@@ -12,13 +12,13 @@ export default function Navigation() {
   const cart = useUIStore((state) => state.cart);
   const favourite = useUIStore((state) => state.favourite);
   return (
-    <nav className='flex justify-between items-center w-full px-5 bg-opacity-0'>
+    <nav className='flex justify-between items-center bg-opacity-0 px-5 w-full'>
       <div className='flex items-center gap-4'>
         <Link href={'/'}>
           <Image src={swipy} alt='swipy logo' width={'120'} height={'120'} />
         </Link>
 
-        <ul className='flex gap-5 '>
+        <ul className='flex gap-5'>
           <Link href={'/products'} className='hover:text-red-500'>
             <li>Products</li>
           </Link>
@@ -35,7 +35,7 @@ export default function Navigation() {
           )}
         </ul>
       </div>
-      <div className='flex gap-6 text-xl px-5'>
+      <div className='flex gap-6 px-5 text-xl'>
         <Link href={'/favourite'} className='group relative'>
           <div
             className={`absolute font-bold text-sm text-white -right-2 -top-1 ${
@@ -46,7 +46,7 @@ export default function Navigation() {
           <button>
             <FaHeart />
           </button>
-          <div className='absolute bg-white text-black text-sm px-2 hidden group-hover:block'>
+          <div className='hidden group-hover:block absolute bg-white px-2 text-black text-sm'>
             Favourite
           </div>
         </Link>
@@ -61,7 +61,7 @@ export default function Navigation() {
           <button>
             <FaShoppingCart />
           </button>
-          <div className='absolute bg-white text-black text-sm px-2 hidden group-hover:block -left-3'>
+          <div className='hidden group-hover:block -left-3 absolute bg-white px-2 text-black text-sm'>
             Cart
           </div>
         </Link>
