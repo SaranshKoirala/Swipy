@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className='bg-black text-white h-screen overflow-hidden'>
+      <body className='bg-black h-screen text-white'>
         <Providers>
           <header>
             <Navigation />

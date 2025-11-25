@@ -118,13 +118,9 @@ export default function Products() {
     }, 300);
   }
 
-  {
-    console.log(favourite);
-  }
-
   return (
     <div
-      className='relative flex flex-col justify-center items-center min-h-[90vh]'
+      className='relative flex flex-col justify-center items-center max-h-[85vh] overflow-y-hidden'
       onKeyDown={listenKeys}
       tabIndex={0}>
       {boolean && (
@@ -149,8 +145,8 @@ export default function Products() {
       ) : data.length === 0 ? (
         <div>No products found!</div>
       ) : (
-        <div className='relative'>
-          <div className='px-5 py-2 font-bold text-2xl text-center'>
+        <div className='relative py-5'>
+          <div className='px-5 py-2 font-bold text-xl text-center'>
             {data?.[productIndex]?.productName}
           </div>
 
@@ -177,7 +173,7 @@ export default function Products() {
                 }></div>
             </div>
 
-            <div className='w-[480px] h-[525px]'>
+            <div className='w-[425px] h-[475px]'>
               <img
                 src={data?.[productIndex]?.productImages[imageIndex]?.url}
                 alt={data?.[productIndex]?.productImages[imageIndex]?.alt}
@@ -189,28 +185,28 @@ export default function Products() {
 
             <div className='right-0 bottom-0 left-0 absolute bg-gradient-to-t from-black to-transparent h-[200px]'></div>
 
-            <p className='-bottom-2 left-5 absolute font-semibold text-2xl'>
+            <p className='-bottom-2 left-5 absolute font-semibold text-xl'>
               Rs.{data?.[productIndex]?.productPrice}
             </p>
           </div>
 
-          <div className='flex justify-center items-center gap-10 m-6'>
+          <div className='flex justify-center items-center gap-10 mt-4'>
             <button
-              className={`w-12 h-12 rounded-full bg-white flex items-center justify-center text-4xl font-bold transition-all ease-in-out duration-300 text-red-500 hover:bg-red-500 hover:text-white hover:scale-125 ${
+              className={`w-10 h-10 rounded-full bg-white flex items-center justify-center text-4xl font-bold transition-all ease-in-out duration-300 text-red-500 hover:bg-red-500 hover:text-white hover:scale-125 ${
                 swipeDirection === 'left' ? 'animate-ping bg-red-500' : ''
               }`}
               onClick={handleCloseBtn}>
               <GrFormClose />
             </button>
             <button
-              className={`w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl font-bold text-green-500 transition-all ease-in-out duration-300 hover:bg-green-500 hover:text-white hover:scale-125 ${
+              className={`w-10 h-10 rounded-full bg-white flex items-center justify-center text-2xl font-bold text-green-500 transition-all ease-in-out duration-300 hover:bg-green-500 hover:text-white hover:scale-125 ${
                 swipeDirection === 'right' ? 'animate-ping bg-green-500' : ''
               }`}
               onClick={() => handleFavouriteBtn(data?.[productIndex])}>
               <FaHeart />
             </button>
             <button
-              className='flex justify-center items-center bg-white rounded-full w-12 h-12 text-neutral-900 text-2xl'
+              className='flex justify-center items-center bg-white rounded-full w-10 h-10 text-neutral-900 text-2xl'
               onClick={() => handleCartBtn(data?.[productIndex])}>
               <FaCartShopping />
             </button>
