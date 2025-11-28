@@ -58,65 +58,6 @@ export default function About() {
           </div>
         </div>
       </div>
-
-      {/* why you'll love it */}
-      {/* <div className='flex flex-col gap-16 px-20 min-h-screen'>
-        <div className='mb-4 text-center'>
-          <h1 className='mb-4 font-bold text-5xl'>Why You'll Love It</h1>
-          <p className='text-gray-400'>Shopping has never been this engaging</p>
-        </div>
-        <div className='gap-8 grid grid-cols-2 grid-rows-2'>
-          <div className='flex justify-center items-center gap-5 bg-white shadow-2xl rounded-xl h-40'>
-            <div className='p-5'>
-              <CiHeart className='bg-orange-500 text-3xl' />
-            </div>
-            <div>
-              <p className='mb-1 font-bold text-xl'>Swipe to love</p>
-              <p>
-                Just like finding your perfect match, swipe right on products
-                you love and left on what you don't.
-              </p>
-            </div>
-          </div>
-          <div className='flex justify-center items-center gap-5 bg-white shadow-2xl px-10 rounded-xl h-40'>
-            <div>
-              {' '}
-              <BsLightningCharge />
-            </div>
-            <div>
-              <p className='mb-1 font-bold text-xl'>Instant Gratification</p>
-              <p>
-                No endless scrolling. Get personalized product recommendations
-                that match your style in seconds.
-              </p>
-            </div>
-          </div>
-          <div className='flex justify-center items-center gap-5 bg-white shadow-2xl px-10 rounded-xl h-40'>
-            <div>
-              <LuShield />
-            </div>
-            <div>
-              <p className='mb-1 font-bold text-xl'> Curated Selection</p>
-              <p>
-                Every product is handpicked and verified. Only the best makes it
-                to your feed.
-              </p>
-            </div>
-          </div>
-          <div className='flex justify-center items-center gap-5 bg-white shadow-2xl px-10 rounded-xl h-40'>
-            <div>
-              <IoTrendingUpSharp />
-            </div>
-            <div>
-              <p className='mb-1 font-bold text-xl'>Learn your style</p>
-              <p>
-                Our AI learns from your swipes to show you more of what you
-                love.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
       <div className='flex flex-col gap-16 px-20 py-20 min-h-screen'>
         <div className='mb-4 text-center'>
           <h1 className='mb-4 font-bold text-5xl'>Why You'll Love It</h1>

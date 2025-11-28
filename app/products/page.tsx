@@ -120,7 +120,7 @@ export default function Products() {
 
   return (
     <div
-      className='relative flex flex-col justify-center items-center max-h-[85vh] overflow-y-hidden'
+      className='relative flex flex-col justify-center items-center min-h-[85vh] overflow-y-hidden'
       onKeyDown={listenKeys}
       tabIndex={0}>
       {boolean && (
