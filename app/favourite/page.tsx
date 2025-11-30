@@ -4,6 +4,7 @@ import { useUIStore } from '@/store/useUIStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { FaCartShopping } from 'react-icons/fa6';
+
 export default function Favourite() {
   const router = useRouter();
   const { user, favourite } = useUIStore();
@@ -15,41 +16,70 @@ export default function Favourite() {
   }, [user, router]);
 
   return (
-    <div className='flex flex-col justify-start items-start gap-10 mx-32 my-10'>
-      <h1>
-        MY FAVOURITES{' '}
-        <span className='text-[0.7rem]'>({favourite.length} items)</span>
-      </h1>
-      {favourite.length >= 1 ? (
-        <ul className='flex flex-wrap gap-10 w-full list-none'>
-          {favourite.map((item) => (
-            <li key={String(item._id)} className='bg-white rounded-xl w-72'>
-              <img
-                src={item.productImages[0].url}
-                alt={item.productImages[0].alt}
-                className='mb-5 rounded-t-xl w-full h-60'
-              />
-              <div className='flex flex-col justify-center items-start gap-0.5 p-2 text-black'>
-                <p className='text-black/80 text-sm'>{item.productName}</p>
-                <p className='mb-1 font-bold text-orange-500 text-xl'>
-                  Rs {item.productPrice}
-                </p>
-                <button className='flex justify-center items-center gap-1 bg-orange-500 py-1 rounded-md w-full text-white'>
-                  <span>
-                    <FaCartShopping />
-                  </span>{' '}
-                  Add to cart
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div>
-          You haven't saved any items to your wishlist yet. Start shopping and
-          add your favorite items to your wishlist.
+    <div className='pb-0.5'>
+      <div className='mx-auto my-12 px-4 max-w-6xl'>
+        {/* Heading */}
+        <h1 className='mb-4 font-bold text-3xl'>
+          MY FAVOURITES{' '}
+          <span className='font-normal text-[0.7rem]'>
+            ({favourite.length} items)
+          </span>
+        </h1>
+
+        {/* Favourites List */}
+        {favourite.length > 0 ? (
+          <ul className='gap-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full list-none'>
+            {favourite.map((item) => (
+              <li
+                key={String(item._id)}
+                className='bg-white shadow-sm hover:shadow-md rounded-xl transition'>
+                <img
+                  src={item.productImages[0].url}
+                  alt={item.productImages[0].alt}
+                  className='rounded-t-xl w-full h-60 object-cover'
+                />
+
+                <div className='flex flex-col gap-2 p-3 text-black'>
+                  <p className='text-black/80 text-sm'>{item.productName}</p>
+
+                  <p className='font-bold text-orange-500 text-xl'>
+                    Rs {item.productPrice}
+                  </p>
+
+                  <button className='flex justify-center items-center gap-2 bg-orange-500 hover:bg-orange-600 py-2 rounded-md w-full font-medium text-white transition'>
+                    <FaCartShopping /> Add to cart
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className='flex flex-col justify-center items-center bg-white shadow-sm mt-10 p-10 rounded-xl text-center'>
+            <p className='font-medium text-lg'>
+              You haven’t saved any items to your wishlist yet.
+            </p>
+            <p className='mt-2 text-gray-600'>
+              Start shopping and add your favorite items to your wishlist.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Bottom Section with FIXED spacing */}
+      <div className='mx-auto mt-12 mb-24 px-4 max-w-6xl'>
+        <div className='bg-white shadow-sm p-6 rounded-xl text-black'>
+          <h2 className='mb-3 font-semibold text-2xl'>
+            Get more from your favourites through the app
+          </h2>
+
+          <ul className='space-y-2 pl-6 list-disc'>
+            <li>Instant notifications on items on sale or low in stock</li>
+            <li>Share your favourites with friends and family</li>
+            <li>See which favourite items are eligible for a voucher</li>
+            <li>Get Swipy points and unlock more rewards</li>
+          </ul>
         </div>
-      )}
+      </div>
     </div>
   );
 }
