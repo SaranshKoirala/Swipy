@@ -3,11 +3,36 @@
 import { useUIStore } from '@/store/useUIStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { FaCartShopping } from 'react-icons/fa6';
+import { ObjectId } from 'mongoose';
+
+interface Images {
+  url: string;
+  alt: string;
+}
+
+interface Product {
+  _id: ObjectId;
+  productName: string;
+  productDescription: string;
+  productPrice: number;
+  productImages: Images[];
+  productCategory: string;
+  quantity?: number;
+}
 
 export default function Favourite() {
   const router = useRouter();
-  const { user, favourite } = useUIStore();
+  const { user, favourite, addToCart } = useUIStore();
+
+  function handleAddToCart(item: Product) {
+    if (!item) {
+      toast.error("Couldn't find the product");
+    }
+    addToCart(item);
+    toast.success(`${item.productName} added to cart.`);
+  }
 
   useEffect(() => {
     if (!user) {
@@ -32,11 +57,11 @@ export default function Favourite() {
             {favourite.map((item) => (
               <li
                 key={String(item._id)}
-                className='bg-white shadow-sm hover:shadow-md rounded-xl transition'>
+                className='group bg-white shadow-sm hover:shadow-md rounded-xl overflow-hidden transition'>
                 <img
                   src={item.productImages[0].url}
                   alt={item.productImages[0].alt}
-                  className='rounded-t-xl w-full h-60 object-cover'
+                  className='rounded-t-xl w-full h-60 object-cover overflow-hidden group-hover:scale-105 transition-all duration-500'
                 />
 
                 <div className='flex flex-col gap-2 p-3 text-black'>
@@ -46,7 +71,9 @@ export default function Favourite() {
                     Rs {item.productPrice}
                   </p>
 
-                  <button className='flex justify-center items-center gap-2 bg-orange-500 hover:bg-orange-600 py-2 rounded-md w-full font-medium text-white transition'>
+                  <button
+                    className='flex justify-center items-center gap-2 bg-orange-500 hover:bg-orange-600 py-2 rounded-md w-full font-medium text-white transition'
+                    onClick={() => handleAddToCart(item)}>
                     <FaCartShopping /> Add to cart
                   </button>
                 </div>

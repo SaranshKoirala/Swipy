@@ -25,6 +25,7 @@ interface Product {
   productPrice: number;
   productImages: Images[];
   productCategory: string;
+  quantity?: number;
 }
 
 export default function Products() {
@@ -48,8 +49,6 @@ export default function Products() {
     queryKey: ['products', searchKeyword],
     queryFn: () => fetchProducts(searchKeyword),
   });
-
-  console.log('loading', isLoading);
 
   function handleImageIndex() {
     if (imageIndex >= 1) {
@@ -110,7 +109,7 @@ export default function Products() {
       return;
     }
     addToCart(product);
-    toast.success('Added to cart!');
+    toast.success(`${product.productName} added to cart!`);
     setSwipeDirection('right');
     setTimeout(() => {
       handleProductIndex();
