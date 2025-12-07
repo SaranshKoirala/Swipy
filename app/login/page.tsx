@@ -3,7 +3,7 @@
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 import { useUIStore } from '@/store/useUIStore';
@@ -13,15 +13,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const user = useUIStore((state) => state.user);
   const setUser = useUIStore((state) => state.setUser);
-
-  useEffect(() => {
-    if (user) {
-      router.push('/');
-      return; // redirect to homepage if logged in
-    }
-  }, [user]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -35,7 +27,7 @@ export default function Login() {
         email,
         password,
       });
-      if (response.data.status === 200) {
+      if (response.status === 200) {
         setUser(response.data.user);
         router.push('/');
         return;
@@ -48,7 +40,7 @@ export default function Login() {
     }
   }
   return (
-    <div className='flex justify-center items-center min-h-[90vh] gap-28'>
+    <div className='flex justify-center items-center gap-28 min-h-[90vh]'>
       <div>
         <Image
           src={'/login.png'}
@@ -60,38 +52,38 @@ export default function Login() {
       <form
         className='flex flex-col justify-center items-center gap-6 bg-neutral-900 p-7 rounded-lg'
         onSubmit={handleSubmit}>
-        <h1 className='text-3xl font-bold'>Login</h1>
+        <h1 className='font-bold text-3xl'>Login</h1>
         <input
           placeholder='Email'
           type='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className=' w-80 h-10 p-3 rounded-sm focus:outline-none text-white bg-neutral-700 placeholder-white'
+          className='bg-neutral-700 p-3 rounded-sm focus:outline-none w-80 h-10 text-white placeholder-white'
         />
         <input
           placeholder='Password'
           type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className=' w-80 h-10 p-3 rounded-sm focus:outline-none text-white bg-neutral-700 placeholder-white'
+          className='bg-neutral-700 p-3 rounded-sm focus:outline-none w-80 h-10 text-white placeholder-white'
         />
-        <button className='w-80 h-10 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg'>
+        <button className='bg-gradient-to-r from-red-500 to-orange-600 rounded-lg w-80 h-10'>
           Log in
         </button>
         <div className='flex gap-1 -m-2 text-sm'>
           <p>Don't have an account?</p>
           <Link href={'/signup'}>
-            <p className=' bg-gradient-to-r from-red-500 to-orange-500 text-transparent bg-clip-text'>
+            <p className='bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 text-transparent'>
               Signup
             </p>
           </Link>
         </div>
-        <div className='flex gap-2 justify-center items-center w-full'>
-          <div className='w-1/2 h-[1px] bg-neutral-600'></div>
+        <div className='flex justify-center items-center gap-2 w-full'>
+          <div className='bg-neutral-600 w-1/2 h-[1px]'></div>
           <div>or</div>
-          <div className='w-1/2 h-[1px] bg-neutral-600'></div>
+          <div className='bg-neutral-600 w-1/2 h-[1px]'></div>
         </div>
-        <button className='w-80 bg-white text-black h-10  outline outline-1 outline-black  flex items-center justify-center gap-2 rounded-lg'>
+        <button className='flex justify-center items-center gap-2 bg-white rounded-lg outline outline-1 outline-black w-80 h-10 text-black'>
           <FcGoogle className='text-xl' />
           Login with Google{' '}
         </button>

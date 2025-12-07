@@ -3,10 +3,10 @@
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
-import { useUIStore } from '@/store/useUIStore';
+import toast from 'react-hot-toast';
 
 export default function Signup() {
   const [name, setName] = useState('');
@@ -14,14 +14,6 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
-
-  const user = useUIStore((state) => state.user);
-
-  useEffect(() => {
-    if (user) {
-      router.push('/'); // redirect to homepage if logged in
-    }
-  }, [user, router]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -39,10 +31,14 @@ export default function Signup() {
         confirmPassword,
       });
 
-      if (response.data.status !== 201) {
-        throw new Error(response.data.message);
+      console.log(response);
+
+      if (response.status !== 201) {
+        toast.error(response.data.message);
+        return;
       }
 
+      toast.success(response.data.message);
       router.push('/login');
     } catch (error) {
       console.log(error);
@@ -54,7 +50,7 @@ export default function Signup() {
     }
   }
   return (
-    <div className='flex justify-center items-center '>
+    <div className='flex justify-center items-center'>
       <div>
         <Image
           src={'/signup.png'}
@@ -69,9 +65,9 @@ export default function Signup() {
       <form
         className='flex flex-col justify-center items-center gap-6 p-7 rounded-lg min-h-[90vh]'
         onSubmit={handleSubmit}>
-        <div className=' flex flex-col justify-center items-center gap-3'>
-          <h1 className='text-4xl font-extrabold'>Create an account</h1>
-          <p className='text-sm text-white/80 w-72 text-center'>
+        <div className='flex flex-col justify-center items-center gap-3'>
+          <h1 className='font-extrabold text-4xl'>Create an account</h1>
+          <p className='w-72 text-white/80 text-sm text-center'>
             Join thousands of happy Swipers finding unique deals and products
             daily.{' '}
           </p>
@@ -81,46 +77,46 @@ export default function Signup() {
           type='text'
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className=' w-80 h-10 p-3 rounded-sm focus:outline-none text-white bg-neutral-700 placeholder-white'
+          className='bg-neutral-700 p-3 rounded-sm focus:outline-none w-80 h-10 text-white placeholder-white'
         />
         <input
           placeholder='Email'
           type='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className=' w-80 h-10 p-3 rounded-sm focus:outline-none text-white bg-neutral-700 placeholder-white'
+          className='bg-neutral-700 p-3 rounded-sm focus:outline-none w-80 h-10 text-white placeholder-white'
         />
         <input
           placeholder='Password'
           type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className=' w-80 h-10 p-3 rounded-sm focus:outline-none text-white bg-neutral-700 placeholder-white'
+          className='bg-neutral-700 p-3 rounded-sm focus:outline-none w-80 h-10 text-white placeholder-white'
         />
         <input
           placeholder='Confirm Password'
           type='password'
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className=' w-80 h-10 p-3 rounded-sm focus:outline-none text-white bg-neutral-700 placeholder-white'
+          className='bg-neutral-700 p-3 rounded-sm focus:outline-none w-80 h-10 text-white placeholder-white'
         />
-        <button className='w-80 h-10 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg'>
+        <button className='bg-gradient-to-r from-red-500 to-orange-600 rounded-lg w-80 h-10'>
           Sign in
         </button>
         <div className='flex gap-1 -m-2 text-sm'>
           <p>Already have an account?</p>
           <Link href={'/login'}>
-            <p className=' bg-gradient-to-r from-red-500 to-orange-500 text-transparent bg-clip-text'>
+            <p className='bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 text-transparent'>
               Login
             </p>
           </Link>
         </div>
-        <div className='flex gap-2 justify-center items-center w-72'>
-          <div className='w-1/2 h-[1px] bg-neutral-600'></div>
+        <div className='flex justify-center items-center gap-2 w-72'>
+          <div className='bg-neutral-600 w-1/2 h-[1px]'></div>
           <div>or</div>
-          <div className='w-1/2 h-[1px] bg-neutral-600'></div>
+          <div className='bg-neutral-600 w-1/2 h-[1px]'></div>
         </div>
-        <button className='w-80 bg-white text-black h-10  outline outline-1 outline-black  flex items-center justify-center gap-2 rounded-lg'>
+        <button className='flex justify-center items-center gap-2 bg-white rounded-lg outline outline-1 outline-black w-80 h-10 text-black'>
           <FcGoogle className='text-xl' />
           Continue with Google{' '}
         </button>
