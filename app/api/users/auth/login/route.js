@@ -2,6 +2,7 @@ import dbConnect from '../../../../../lib/dbConnect';
 import { User } from '@/models/User.js';
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 export async function POST(request) {
   try {
@@ -28,17 +29,29 @@ export async function POST(request) {
       );
     }
 
-    return NextResponse.json(
+    //creating a token
+    const token = jwt.sign(
+      { id: user._id, email: user.email, name: user.name },
+      process.env.JWT_SECRET,
+      { expiresIn: '1m' } // token valid for 7 days
+    );
+
+    const response = NextResponse.json(
       {
-        message: 'Login Sucessful!',
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-        },
+        message: 'Login successful!',
+        user: { id: user._id, name: user.name, email: user.email },
       },
       { status: 200 }
     );
+
+    response.cookies.set('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60, // 7 days in seconds
+      path: '/', // cookie available on all routes
+    });
+
+    return response;
   } catch (err) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }

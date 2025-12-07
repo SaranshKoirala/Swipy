@@ -27,7 +27,7 @@ interface UIStore {
   cart: Product[];
   favourite: Product[];
 
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
   clearUser: () => void;
 
   addToCart: (product: Product) => void;

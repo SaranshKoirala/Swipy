@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 import { useUIStore } from '@/store/useUIStore';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -29,11 +30,13 @@ export default function Login() {
       });
       if (response.status === 200) {
         setUser(response.data.user);
+        toast.success(response.data.message);
         router.push('/');
         return;
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      toast.error(error?.response?.data?.message);
     } finally {
       setEmail('');
       setPassword('');
