@@ -20,7 +20,6 @@ export async function POST(request) {
       return NextResponse.json({ message: 'User not found!' }, { status: 404 });
     }
 
-    //compairing the password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return NextResponse.json(
@@ -29,11 +28,20 @@ export async function POST(request) {
       );
     }
 
-    //creating a token
-    const token = jwt.sign(
-      { id: user._id, email: user.email, name: user.name },
-      process.env.JWT_SECRET,
-      { expiresIn: '1m' } // token valid for 7 days
+    // Create tokens
+    const accessToken = jwt.sign(
+      { sub: user._id },
+      process.env.JWT_ACCESS_SECRET,
+      {
+        expiresIn: '10m',
+      }
+    );
+    const refreshToken = jwt.sign(
+      { sub: user._id },
+      process.env.JWT_REFRESH_SECRET,
+      {
+        expiresIn: '7d',
+      }
     );
 
     const response = NextResponse.json(
@@ -44,11 +52,20 @@ export async function POST(request) {
       { status: 200 }
     );
 
-    response.cookies.set('token', token, {
+    response.cookies.set('accessToken', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 60, // 7 days in seconds
-      path: '/', // cookie available on all routes
+      sameSite: 'strict',
+      maxAge: 10 * 60, // 10 minutes
+      path: '/',
+    });
+
+    response.cookies.set('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+      path: '/api/users/auth/refresh',
     });
 
     return response;
