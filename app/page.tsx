@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <div className='relative flex flex-col justify-center items-center gap-8 w-full min-h-[85vh]'>
-      {/* <SplashCursor /> */}
+      <SplashCursor />
 
       <BlurText
         text='Swipe something epic.'
