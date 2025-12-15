@@ -2,6 +2,7 @@ import { CiHeart } from 'react-icons/ci';
 import { BsLightningCharge } from 'react-icons/bs';
 import { LuShield } from 'react-icons/lu';
 import { IoTrendingUpSharp } from 'react-icons/io5';
+import Link from 'next/link';
 export default function About() {
   return (
     <div className='bg-orange-50 overflow-auto text-black'>
@@ -16,9 +17,11 @@ export default function About() {
           fun as your favorite dating app. Swipe through curated products and
           fall in love with your next purchase.
         </p>
-        <button className='bg-white hover:bg-amber-600 px-3 py-2 rounded-xl text-black hover:text-white text-xl transition-all duration-500'>
-          Start Swipping
-        </button>
+        <Link href='/products'>
+          <button className='bg-white hover:bg-amber-600 px-3 py-2 rounded-xl text-black hover:text-white text-xl transition-all duration-500'>
+            Start Swipping
+          </button>
+        </Link>
       </div>
 
       {/* how it works */}
