@@ -1,29 +1,51 @@
 'use client';
 
-import type { Metadata } from 'next';
 import './globals.css';
 import Navigation from './components/Navigation';
 import { Providers } from './providers';
 import { Toaster } from 'react-hot-toast';
 import { useEffect } from 'react';
-
-// export const metadata: Metadata = {
-//   title: 'Swipy | E-commerce Site',
-//   description: 'Tinder but E-commerce site.',
-// };
+import { useUIStore } from '@/store/useUIStore';
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
+  const setUser = useUIStore((state) => state.setUser);
+
   useEffect(() => {
-    // Silent refresh on app load
-    fetch('/api/users/auth/refresh', {
-      method: 'POST',
-      credentials: 'include', // Important: send cookies
-    });
-  }, []);
+    const refreshUser = async () => {
+      try {
+        // 1️⃣ Refresh access token
+        const refreshRes = await fetch('/api/users/auth/refresh', {
+          method: 'POST',
+          credentials: 'include', // send cookies
+        });
+
+        if (!refreshRes.ok) return;
+
+        // 2️⃣ Get user info
+        const userRes = await fetch('/api/users/auth/me', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (!userRes.ok) return;
+
+        const data = await userRes.json();
+        if (data.user) {
+          setUser({
+            id: data.user._id,
+            name: data.user.name,
+            email: data.user.email,
+          });
+        }
+      } catch (err) {
+        console.error('Error refreshing user:', err);
+      }
+    };
+
+    refreshUser();
+  }, [setUser]);
 
   return (
     <html lang='en'>

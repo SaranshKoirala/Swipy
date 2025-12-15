@@ -1,29 +1,32 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
+import dbConnect from '@/lib/dbConnect';
+import { User } from '@/models/User';
 
 export async function GET(request) {
-  const token = request.cookies.get('token')?.value;
-
-  if (!token) {
-    return NextResponse.json(
-      { status: 401, message: 'Not authenticated' },
-      { status: 401 }
-    );
-  }
-
+  console.log('ALL COOKIES', request.cookies.getAll());
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    return NextResponse.json({ status: 200, user: decoded });
-  } catch (err) {
-    if (err.name === 'TokenExpiredError') {
-      return NextResponse.json(
-        { status: 401, message: 'Token expired' },
-        { status: 401 }
-      );
+    await dbConnect();
+
+    // read the SAME cookie you set during login
+    const token = request.cookies.get('accessToken')?.value;
+
+    if (!token) {
+      return NextResponse.json({ user: null }, { status: 401 });
     }
-    return NextResponse.json(
-      { status: 401, message: 'Invalid token' },
-      { status: 401 }
-    );
+
+    // verify with the SAME secret used to sign access token
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+
+    // fetch real user from DB
+    const user = await User.findById(decoded.sub).select('_id name email');
+
+    if (!user) {
+      return NextResponse.json({ user: null }, { status: 404 });
+    }
+
+    return NextResponse.json({ user }, { status: 200 });
+  } catch (err) {
+    return NextResponse.json({ user: null }, { status: 401 });
   }
 }
