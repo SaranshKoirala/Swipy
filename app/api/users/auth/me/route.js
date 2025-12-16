@@ -4,7 +4,7 @@ import dbConnect from '@/lib/dbConnect';
 import { User } from '@/models/User';
 
 export async function GET(request) {
-  console.log('ALL COOKIES', request.cookies.getAll());
+  // console.log('ALL COOKIES', request.cookies.getAll());
   try {
     await dbConnect();
 

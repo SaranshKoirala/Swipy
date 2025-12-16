@@ -42,6 +42,6 @@ export async function POST(req) {
 
     return res;
   } catch {
-    return new NextResponse(null, { status: 403 });
+    return NextResponse.json({ ok: false }, { status: 403 });
   }
 }
