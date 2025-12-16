@@ -4,6 +4,14 @@ import { Providers } from './providers';
 import { Toaster } from 'react-hot-toast';
 import { getServerUser } from '@/lib/serverAuth';
 
+export const metadata = {
+  title: 'Swipy | E-commerce',
+  description: 'This is the tinder based online e-commerce app.',
+  keywords: ['nextjs', 'react', 'typescript'],
+  authors: [{ name: 'Saransh Koirala' }],
+  robots: 'index, follow',
+};
+
 export default async function RootLayout({
   children,
 }: {
